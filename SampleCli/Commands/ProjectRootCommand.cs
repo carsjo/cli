@@ -5,9 +5,9 @@ using SampleCli.Extensions;
 
 namespace SampleCli.Commands;
 
-public sealed class RedMarbleRootCommand : RootCommand
+public sealed class ProjectRootCommand : RootCommand
 {
-    private RedMarbleRootCommand() : base("Example for a basic command line tool")
+    private ProjectRootCommand() : base("Example for a basic command line tool")
     {
         Subcommands.Add(new GreetCommand());
         Subcommands.Add(new OpenAiCommand());
@@ -25,5 +25,5 @@ public sealed class RedMarbleRootCommand : RootCommand
     }
 
     public static Task<int> InvokeAsync(string[] args, TextWriter? output = null, TextWriter? error = null)
-        => new RedMarbleRootCommand().Parse(args).InvokeAsync(output, error);
+        => new ProjectRootCommand().Parse(args).InvokeAsync(output, error);
 }

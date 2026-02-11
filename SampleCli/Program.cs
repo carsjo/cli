@@ -1,3 +1,3 @@
 ﻿using SampleCli.Commands;
 
-return await RedMarbleRootCommand.InvokeAsync(args);
+return await ProjectRootCommand.InvokeAsync(args);

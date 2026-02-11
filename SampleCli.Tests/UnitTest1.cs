@@ -10,7 +10,7 @@ public class UnitTest1
     {
         await using var output = new StringWriter();
         await using var error = new StringWriter();
-        await RedMarbleRootCommand.InvokeAsync([
+        await ProjectRootCommand.InvokeAsync([
             "-e",
             "Production",
             "greet",
