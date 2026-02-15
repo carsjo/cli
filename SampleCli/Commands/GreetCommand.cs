@@ -27,16 +27,16 @@ public sealed class GreetCommand : BaseCommand<GreetCommand>
     protected override void ConfigureServices(IServiceCollection services)
         => services.AddHttpClient();
 
-    protected override Func<ParseResult, CancellationToken, ILogger<GreetCommand>, Task<int>> ConfigureAction
-        => async (result, cancellationToken, logger) =>
+    protected override Func<ParseResult, CancellationToken, Task<int>> ConfigureAction
+        => async (result, cancellationToken) =>
         {
             var serviceScopeFactory = ServiceProvider.GetService<IServiceScopeFactory>();
             var httpClientFactory = ServiceProvider.GetService<IHttpClientFactory>();
             var hostEnvironment = ServiceProvider.GetRequiredService<IHostEnvironment>();
 
-            if (Debug)
+            if (IsDebugMode)
             {
-                logger.LogInformation("Debug mode is enabled.");
+                Logger.LogInformation("Debug mode is enabled.");
             }
 
             await Output.WriteLineAsync("Waiting for 1 second...");

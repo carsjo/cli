@@ -21,8 +21,8 @@ public sealed class OpenAiCommand : BaseCommand<OpenAiCommand>
     protected override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         => services.AddSingleton(new ChatClient(configuration["OpenAI:Model"], configuration["OpenAI:ApiKey"]));
 
-    protected override Func<ParseResult, CancellationToken, ILogger<OpenAiCommand>, Task<int>> ConfigureAction
-        => async (parseResult, cancellationToken, logger) =>
+    protected override Func<ParseResult, CancellationToken, Task<int>> ConfigureAction
+        => async (parseResult, cancellationToken) =>
         {
             var client = ServiceProvider.GetRequiredService<ChatClient>();
 

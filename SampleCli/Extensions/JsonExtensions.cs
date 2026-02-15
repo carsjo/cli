@@ -5,22 +5,16 @@ namespace SampleCli.Extensions;
 
 public static class JsonExtensions
 {
-    private static readonly JsonSerializerOptions DefaultOptions = new(JsonSerializerDefaults.Web)
+    public static readonly JsonSerializerOptions DefaultOptions = new(JsonSerializerOptions.Web)
     {
-        Converters = { new JsonStringEnumConverter() }
+        Converters = { new JsonStringEnumConverter() },
+        WriteIndented = false
     };
     
     extension(string json)
     {
         public T FromJson<T>(JsonSerializerOptions? options = null) where T : class, new()
             => JsonSerializer.Deserialize<T>(json, options ?? DefaultOptions) ??
-               throw new InvalidOperationException("Deserialization resulted in null.");
-    }
-
-    extension(JsonElement element)
-    {
-        public T ConvertTo<T>(JsonSerializerOptions? options = null) where T : class, new()
-            => element.Deserialize<T>(options ?? DefaultOptions) ??
                throw new InvalidOperationException("Deserialization resulted in null.");
     }
 

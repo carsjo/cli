@@ -8,6 +8,18 @@ using Microsoft.Extensions.Logging;
 
 namespace SampleCli.Extensions;
 
+public interface IServiceLocator
+{
+    /// <inheritdoc cref="ServiceProviderServiceExtensions.GetRequiredService{T}" />
+    T GetRequiredService<T>() where T : notnull;
+    
+    /// <inheritdoc cref="ServiceProviderServiceExtensions.GetService{T}" />
+    T? GetService<T>();
+    
+    /// <inheritdoc cref="ServiceProviderServiceExtensions.GetServices{T}" />
+    T[] GetServices<T>() where T : notnull;
+}
+
 internal static class ParseResultExtensions
 {
     extension(ParseResult parseResult)
@@ -19,7 +31,7 @@ internal static class ParseResultExtensions
         /// <summary>
         /// To use this, inherit your command from <see cref="Commands.BaseCommand{T}"/>
         /// </summary>
-        public IServiceProvider ServiceProvider => parseResult.InvokeConfiguration.ServiceProvider;
+        public IServiceLocator ServiceProvider => parseResult.InvokeConfiguration.ServiceProvider;
 
         /// <summary>
         /// To use this, inherit your command from <see cref="Commands.BaseCommand{T}"/>
@@ -117,9 +129,21 @@ internal static class ParseResultExtensions
         
         public IHostEnvironment HostEnvironment { get; }
 
-        public IServiceProvider ServiceProvider => _serviceProvider ??= _services.BuildServiceProvider();
+        public IServiceLocator ServiceProvider => new ServiceLocator(_serviceProvider ??= _services.BuildServiceProvider());
 
         public async ValueTask DisposeAsync()
-            => await (_serviceProvider?.DisposeAsync() ?? new ValueTask(Task.CompletedTask));
+            => await (_serviceProvider?.DisposeAsync() ?? ValueTask.CompletedTask);
+    }
+    
+    private sealed class ServiceLocator(IServiceProvider serviceProvider) : IServiceLocator
+    {
+        public T GetRequiredService<T>() where T : notnull 
+            => serviceProvider.GetRequiredService<T>();
+        
+        public T? GetService<T>() 
+            => serviceProvider.GetService<T>();
+
+        public T[] GetServices<T>() where T : notnull
+            => serviceProvider.GetServices<T>().ToArray();
     }
 }

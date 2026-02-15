@@ -1,9 +1,8 @@
-﻿using SampleCli.Commands;
-using SampleCli.Extensions;
+﻿using SampleCli.Extensions;
 
-namespace SampleCli;
+namespace SampleCli.Commands;
 
-public class UnitTest1
+public sealed class ProjectRootCommandTests
 {
     [Fact]
     public async Task Test1()

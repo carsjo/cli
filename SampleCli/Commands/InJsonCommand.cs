@@ -10,12 +10,12 @@ public sealed class InJsonCommand : BaseCommand<InJsonCommand>
         Arguments.Add(Constants.Arguments.Body);
     }
 
-    protected override Func<ParseResult, CancellationToken, ILogger<InJsonCommand>, Task<int>> ConfigureAction =>
-        async (parseResult, cancellationToken, logger) =>
+    protected override Func<ParseResult, CancellationToken, Task<int>> ConfigureAction =>
+        async (parseResult, cancellationToken) =>
         {
-            if (Debug)
+            if (IsDebugMode)
             {
-                logger.LogInformation("Debug mode is enabled.");
+                Logger.LogInformation("Debug mode is enabled.");
             }
             
             var input = parseResult.GetRequiredValue(Constants.Arguments.Body);
